@@ -69,7 +69,7 @@
         }
         
         .sidebar-item-revision {
-            padding-left: 30px; /* Indent to differentiate */
+            padding-left: 30px; 
             font-size: 0.9em;
             font-style: italic;
         }
@@ -158,15 +158,22 @@
             font-weight: bold;
         }
 
-        /* Calendar Styles */
+        /* New Grid Layout for main content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 300px 300px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* Compact Calendar Styles */
         .calendar-container {
-            width: 300px; /* Smaller width */
+            width: 100%;
             background-color: var(--card-bg);
             border-radius: 8px;
             padding: 20px;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--border-color);
-            margin-bottom: 20px;
         }
         
         .calendar-header {
@@ -228,23 +235,86 @@
             font-weight: bold;
         }
         
-        /* Task List Styles */
-        .task-container {
-            flex-grow: 1;
+        /* Dropdown Tile Styles */
+        .dropdown-tile {
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .dropdown-header .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-content {
+            padding: 20px;
+            transition: max-height 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .dropdown-tile.open .dropdown-content {
+            max-height: 500px; /* A large value to allow content to show */
+        }
+        
+        .dropdown-tile.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Add Task Form inside dropdown */
+        .add-task-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .add-task-form input,
+        .add-task-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .add-task-form button {
+            padding: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Task List & Timetable Styles */
+        .task-container, .timetable-container {
+            grid-column: span 2;
             background-color: var(--card-bg);
             border-radius: 8px;
             padding: 20px;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--border-color);
-            margin-bottom: 20px;
         }
-
-        .task-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
+        
         .task-item {
             display: flex;
             align-items: flex-start;
@@ -293,43 +363,32 @@
             text-decoration: line-through;
             color: #888;
         }
-        
-        /* Add Task Form */
-        .add-task-form {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
 
-        .add-task-form h3 {
-            margin-top: 0;
+        /* Revision Timetable styles */
+        .timetable-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
         }
         
-        .add-task-form input,
-        .add-task-form textarea,
-        .add-task-form select {
-            width: 100%;
+        .timetable-table th, .timetable-table td {
             padding: 10px;
-            margin-bottom: 10px;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            box-sizing: border-box;
         }
-
-        .add-task-form button {
+        
+        .timetable-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .timetable-table input[type="text"] {
             width: 100%;
-            padding: 10px;
-            background-color: var(--accent-color);
-            color: white;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            background: none;
+            padding: 5px;
         }
-
-        /* Completed Tasks Modal */
+        
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -378,7 +437,6 @@
             text-decoration: line-through;
             border-bottom: 1px solid var(--border-color);
         }
-        
     </style>
 </head>
 <body>
@@ -387,8 +445,13 @@
         <div class="sidebar-header">Main Menu</div>
         <ul>
             <li>
-                <div class="sidebar-item active" onclick="showView('upcoming-tasks')">
-                    <span>📅 Upcoming Tasks</span>
+                <div class="sidebar-item active" onclick="showView('dashboard-view')">
+                    <span>🏠 Dashboard</span>
+                </div>
+            </li>
+            <li>
+                <div class="sidebar-item" onclick="showView('timetable-view')">
+                    <span>📚 Revision Timetable</span>
                 </div>
             </li>
             <li>
@@ -405,40 +468,107 @@
     </div>
 
     <div class="main-content">
-        <div id="upcoming-tasks-view">
+        <div id="dashboard-view">
             <div class="content-header">
                 <span class="content-title">Personal Organizer</span>
             </div>
             
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <button id="prev-month-btn">&lt;</button>
-                    <h2 id="current-month-year"></h2>
-                    <button id="next-month-btn">&gt;</button>
-                </div>
-                <div id="calendar-grid" class="calendar-grid">
-                    <div class="day-name">Sun</div>
-                    <div class="day-name">Mon</div>
-                    <div class="day-name">Tue</div>
-                    <div class="day-name">Wed</div>
-                    <div class="day-name">Thu</div>
-                    <div class="day-name">Fri</div>
-                    <div class="day-name">Sat</div>
+            <div class="content-grid">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prev-month-btn">&lt;</button>
+                        <h2 id="current-month-year"></h2>
+                        <button id="next-month-btn">&gt;</button>
                     </div>
+                    <div id="calendar-grid" class="calendar-grid">
+                        <div class="day-name">Sun</div>
+                        <div class="day-name">Mon</div>
+                        <div class="day-name">Tue</div>
+                        <div class="day-name">Wed</div>
+                        <div class="day-name">Thu</div>
+                        <div class="day-name">Fri</div>
+                        <div class="day-name">Sat</div>
+                    </div>
+                </div>
+
+                <div class="dropdown-tile" id="lessons-dropdown">
+                    <div class="dropdown-header">
+                        <h3>Today's Lessons</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="dropdown-content">
+                        <p>10:00 - 11:00: Maths</p>
+                        <p>11:00 - 12:00: Science</p>
+                        <p>13:00 - 14:00: English</p>
+                    </div>
+                </div>
+                
+                <div class="dropdown-tile" id="add-task-dropdown">
+                    <div class="dropdown-header">
+                        <h3>Add New Task</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="dropdown-content add-task-form">
+                        <input type="text" id="task-title-input" placeholder="Task title" required>
+                        <textarea id="task-description-input" placeholder="Task description (optional)"></textarea>
+                        <input type="date" id="task-date-input" required>
+                        <button onclick="addTask()">Add Task</button>
+                    </div>
+                </div>
             </div>
             
-            <div class="add-task-form">
-                <h3>Add New Task</h3>
-                <input type="text" id="task-title-input" placeholder="Task title" required>
-                <textarea id="task-description-input" placeholder="Task description (optional)"></textarea>
-                <input type="date" id="task-date-input" required>
-                <button onclick="addTask()">Add Task</button>
-            </div>
-            
-            <div class="task-container">
+            <div class="task-container" style="margin-top: 20px;">
                 <h3>Upcoming Tasks</h3>
                 <ul id="upcoming-task-list" class="task-list">
                     </ul>
+            </div>
+        </div>
+        
+        <div id="timetable-view" style="display: none;">
+            <div class="content-header">
+                <span class="content-title">Revision Timetable</span>
+            </div>
+            <div class="timetable-container">
+                <p>Plan your weekly revision schedule below. Click on a cell to edit.</p>
+                <table class="timetable-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Hours</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                            <th>Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" value="Maths"></td>
+                            <td><input type="text" value="3"></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="English"></td>
+                            <td><input type="text" value="2"></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                            <td><input type="text" value=""></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -458,9 +588,7 @@
             <h2>Add Revision Site</h2>
             <input type="text" id="revision-name-input" class="modal-input" placeholder="Site Name">
             <input type="text" id="revision-url-input" class="modal-input" placeholder="Site URL (e.g., https://www.example.com)">
-            <div class="modal-buttons">
-                <button class="add-button" onclick="createRevisionSite()">Add</button>
-            </div>
+            <button class="add-button" onclick="createRevisionSite()">Add</button>
         </div>
     </div>
 
@@ -482,13 +610,40 @@
         
         let currentDate = new Date();
         
+        // --- Core Functions ---
         function saveData() {
             localStorage.setItem('tasks', JSON.stringify(tasks));
             localStorage.setItem('revisionSites', JSON.stringify(revisionSites));
         }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function showView(viewId) {
+            const views = ['dashboard-view', 'timetable-view'];
+            views.forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            document.getElementById(viewId).style.display = 'block';
+
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            document.querySelector(`[onclick="showView('${viewId}')"]`).classList.add('active');
+        }
+
+        // --- Dropdown Functionality ---
+        document.getElementById('lessons-dropdown').addEventListener('click', function() {
+            this.classList.toggle('open');
+        });
+        document.getElementById('add-task-dropdown').addEventListener('click', function() {
+            this.classList.toggle('open');
+        });
         
         // --- Revision Sites Functions ---
-
         function renderRevisionSites() {
             revisionSitesList.innerHTML = '';
             for (const siteName in revisionSites) {
@@ -543,7 +698,6 @@
         }
         
         // --- Calendar and Task Functions ---
-
         function renderCalendar() {
             const date = new Date(currentDate);
             const year = date.getFullYear();
@@ -554,18 +708,15 @@
             
             currentMonthYear.textContent = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(date);
             
-            // Clear previous calendar days
             const daysInGrid = calendarGrid.querySelectorAll('.day');
             daysInGrid.forEach(day => day.remove());
 
-            // Add empty days for alignment
             for (let i = 0; i < firstDay; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.classList.add('day');
                 calendarGrid.appendChild(emptyDay);
             }
             
-            // Add days of the month
             for (let i = 1; i <= lastDay; i++) {
                 const day = document.createElement('div');
                 day.classList.add('day');
@@ -573,12 +724,10 @@
                 
                 const dayDate = new Date(year, month, i);
 
-                // Highlight current day
                 if (dayDate.toDateString() === today.toDateString()) {
                     day.classList.add('current-day');
                 }
                 
-                // Highlight days with tasks
                 const hasTasks = tasks.some(task => {
                     const taskDate = new Date(task.date);
                     return !task.completed && taskDate.getFullYear() === year && taskDate.getMonth() === month && taskDate.getDate() === i;
@@ -588,11 +737,9 @@
                 }
                 
                 day.addEventListener('click', () => {
-                    // Set task input date
                     const formattedDate = dayDate.toISOString().split('T')[0];
                     taskDateInput.value = formattedDate;
                     
-                    // Highlight selected day (optional for future use)
                     const allDays = calendarGrid.querySelectorAll('.day');
                     allDays.forEach(d => d.classList.remove('selected-day'));
                     day.classList.add('selected-day');
@@ -692,14 +839,6 @@
             });
         }
         
-        function openModal(id) {
-            document.getElementById(id).style.display = 'block';
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
         // Event Listeners
         prevMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
@@ -715,6 +854,7 @@
         renderRevisionSites();
         renderCalendar();
         renderUpcomingTasks();
+        showView('dashboard-view');
     </script>
 
 </body>
