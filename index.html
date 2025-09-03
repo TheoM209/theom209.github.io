@@ -67,9 +67,75 @@
             gap: 10px;
             font-weight: 500;
         }
+        
+        .sidebar-item-revision {
+            padding-left: 30px; /* Indent to differentiate */
+            font-size: 0.9em;
+            font-style: italic;
+        }
 
         .sidebar-item:hover, .sidebar-item.active {
             background-color: #f0f0f0;
+        }
+
+        .sidebar-item.active {
+            font-weight: 600;
+        }
+
+        .subject-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .subject-item-header .color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .subject-item-header .subject-name {
+            flex-grow: 1;
+        }
+
+        .subject-item-header .actions {
+            display: none;
+        }
+        
+        .sidebar-item:hover .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8em;
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+
+        .action-button:hover {
+            opacity: 1;
+        }
+
+        .add-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: auto;
+            transition: background-color 0.2s ease;
+        }
+
+        .add-button:hover {
+            background-color: #0056b3;
         }
 
         .main-content {
@@ -94,7 +160,7 @@
 
         /* Calendar Styles */
         .calendar-container {
-            width: 100%;
+            width: 300px; /* Smaller width */
             background-color: var(--card-bg);
             border-radius: 8px;
             padding: 20px;
@@ -116,6 +182,11 @@
             font-size: 1.5em;
             cursor: pointer;
             color: var(--accent-color);
+        }
+        
+        .calendar-header h2 {
+            font-size: 1.2em;
+            margin: 0;
         }
 
         .calendar-grid {
@@ -148,7 +219,7 @@
         }
 
         .calendar-grid .day.has-tasks {
-            border: 2px solid var(--accent-color);
+            border: 2px solid #ffc107;
         }
         
         .calendar-grid .day.selected-day {
@@ -157,73 +228,108 @@
             font-weight: bold;
         }
         
-        /* To-Do List Styles */
-        .todo-container {
+        /* Task List Styles */
+        .task-container {
             flex-grow: 1;
             background-color: var(--card-bg);
             border-radius: 8px;
             padding: 20px;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
 
-        .todo-input-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .todo-input-container input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-        }
-        
-        .todo-input-container button {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .todo-list {
+        .task-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .todo-item {
+        .task-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 10px;
-            padding: 10px;
+            padding: 15px 0;
             border-bottom: 1px solid var(--border-color);
         }
         
-        .todo-item:last-child {
+        .task-item:last-child {
             border-bottom: none;
         }
         
-        .todo-item input[type="checkbox"] {
+        .task-item input[type="checkbox"] {
+            margin-top: 3px;
             width: 20px;
             height: 20px;
             cursor: pointer;
         }
         
-        .todo-item span {
+        .task-item-content {
             flex-grow: 1;
+        }
+
+        .task-item-content h4 {
+            margin: 0 0 5px 0;
             font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .task-item-content p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .task-item-content .task-date {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 5px;
+            font-style: italic;
         }
         
-        .todo-item.completed span {
+        .task-item.completed h4,
+        .task-item.completed .task-date {
             text-decoration: line-through;
             color: #888;
         }
+        
+        /* Add Task Form */
+        .add-task-form {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
 
-        /* Completed Tasks Window/Modal */
+        .add-task-form h3 {
+            margin-top: 0;
+        }
+        
+        .add-task-form input,
+        .add-task-form textarea,
+        .add-task-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .add-task-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Completed Tasks Modal */
         .modal {
             display: none;
             position: fixed;
@@ -272,7 +378,7 @@
             text-decoration: line-through;
             border-bottom: 1px solid var(--border-color);
         }
-
+        
     </style>
 </head>
 <body>
@@ -281,8 +387,8 @@
         <div class="sidebar-header">Main Menu</div>
         <ul>
             <li>
-                <div class="sidebar-item active" onclick="showContent('tasks-view')">
-                    <span>📅 Today's Tasks</span>
+                <div class="sidebar-item active" onclick="showView('upcoming-tasks')">
+                    <span>📅 Upcoming Tasks</span>
                 </div>
             </li>
             <li>
@@ -291,10 +397,15 @@
                 </div>
             </li>
         </ul>
+        
+        <div class="sidebar-header" style="margin-top: 20px;">Revision Sites</div>
+        <ul id="revision-sites-list">
+            </ul>
+        <button class="add-button" onclick="openRevisionModal()">+ Add Site</button>
     </div>
 
     <div class="main-content">
-        <div id="tasks-view">
+        <div id="upcoming-tasks-view">
             <div class="content-header">
                 <span class="content-title">Personal Organizer</span>
             </div>
@@ -316,12 +427,17 @@
                     </div>
             </div>
             
-            <div class="todo-container">
-                <div class="todo-input-container">
-                    <input type="text" id="new-task-input" placeholder="Add a new task..." />
-                    <button onclick="addTask()">Add</button>
-                </div>
-                <ul id="todo-list" class="todo-list">
+            <div class="add-task-form">
+                <h3>Add New Task</h3>
+                <input type="text" id="task-title-input" placeholder="Task title" required>
+                <textarea id="task-description-input" placeholder="Task description (optional)"></textarea>
+                <input type="date" id="task-date-input" required>
+                <button onclick="addTask()">Add Task</button>
+            </div>
+            
+            <div class="task-container">
+                <h3>Upcoming Tasks</h3>
+                <ul id="upcoming-task-list" class="task-list">
                     </ul>
             </div>
         </div>
@@ -335,32 +451,106 @@
                 </ul>
         </div>
     </div>
+    
+    <div id="revision-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('revision-modal')">&times;</span>
+            <h2>Add Revision Site</h2>
+            <input type="text" id="revision-name-input" class="modal-input" placeholder="Site Name">
+            <input type="text" id="revision-url-input" class="modal-input" placeholder="Site URL (e.g., https://www.example.com)">
+            <div class="modal-buttons">
+                <button class="add-button" onclick="createRevisionSite()">Add</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [];
+        let revisionSites = JSON.parse(localStorage.getItem('revisionSites')) || {};
         
+        const revisionSitesList = document.getElementById('revision-sites-list');
         const calendarGrid = document.getElementById('calendar-grid');
         const currentMonthYear = document.getElementById('current-month-year');
         const prevMonthBtn = document.getElementById('prev-month-btn');
         const nextMonthBtn = document.getElementById('next-month-btn');
-        const todoList = document.getElementById('todo-list');
-        const newTaskInput = document.getElementById('new-task-input');
+        const upcomingTaskList = document.getElementById('upcoming-task-list');
         const completedList = document.getElementById('completed-list');
+        
+        const taskTitleInput = document.getElementById('task-title-input');
+        const taskDescriptionInput = document.getElementById('task-description-input');
+        const taskDateInput = document.getElementById('task-date-input');
         
         let currentDate = new Date();
         
         function saveData() {
             localStorage.setItem('tasks', JSON.stringify(tasks));
-            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+            localStorage.setItem('revisionSites', JSON.stringify(revisionSites));
         }
         
+        // --- Revision Sites Functions ---
+
+        function renderRevisionSites() {
+            revisionSitesList.innerHTML = '';
+            for (const siteName in revisionSites) {
+                const site = revisionSites[siteName];
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.className = 'sidebar-item sidebar-item-revision';
+                a.href = site.url;
+                a.target = '_blank';
+                a.innerHTML = `
+                    <div class="subject-item-header">
+                        <span class="subject-name">${siteName}</span>
+                        <div class="actions">
+                            <span class="action-button" onclick="deleteRevisionSite('${siteName}', event)">✖</span>
+                        </div>
+                    </div>
+                `;
+                li.appendChild(a);
+                revisionSitesList.appendChild(li);
+            }
+        }
+
+        function openRevisionModal() {
+            document.getElementById('revision-name-input').value = '';
+            document.getElementById('revision-url-input').value = '';
+            openModal('revision-modal');
+        }
+
+        function createRevisionSite() {
+            const siteName = document.getElementById('revision-name-input').value.trim();
+            let siteUrl = document.getElementById('revision-url-input').value.trim();
+        
+            if (siteUrl && !siteUrl.startsWith('http://') && !siteUrl.startsWith('https://')) {
+                siteUrl = `https://${siteUrl}`;
+            }
+
+            if (siteName && siteUrl) {
+                revisionSites[siteName] = { url: siteUrl };
+                saveData();
+                closeModal('revision-modal');
+                renderRevisionSites();
+            }
+        }
+        
+        function deleteRevisionSite(siteName, event) {
+            event.stopPropagation();
+            if (confirm(`Are you sure you want to delete "${siteName}"?`)) {
+                delete revisionSites[siteName];
+                saveData();
+                renderRevisionSites();
+            }
+        }
+        
+        // --- Calendar and Task Functions ---
+
         function renderCalendar() {
             const date = new Date(currentDate);
             const year = date.getFullYear();
             const month = date.getMonth();
             const firstDay = new Date(year, month, 1).getDay();
             const lastDay = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
             
             currentMonthYear.textContent = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(date);
             
@@ -381,17 +571,28 @@
                 day.classList.add('day');
                 day.textContent = i;
                 
-                const dayDate = new Date(year, month, i).toDateString();
-                const hasTasks = tasks.some(task => new Date(task.date).toDateString() === dayDate);
+                const dayDate = new Date(year, month, i);
+
+                // Highlight current day
+                if (dayDate.toDateString() === today.toDateString()) {
+                    day.classList.add('current-day');
+                }
+                
+                // Highlight days with tasks
+                const hasTasks = tasks.some(task => {
+                    const taskDate = new Date(task.date);
+                    return !task.completed && taskDate.getFullYear() === year && taskDate.getMonth() === month && taskDate.getDate() === i;
+                });
                 if (hasTasks) {
                     day.classList.add('has-tasks');
                 }
                 
                 day.addEventListener('click', () => {
-                    const selectedDate = new Date(year, month, i);
-                    renderTodoList(selectedDate);
+                    // Set task input date
+                    const formattedDate = dayDate.toISOString().split('T')[0];
+                    taskDateInput.value = formattedDate;
                     
-                    // Highlight selected day
+                    // Highlight selected day (optional for future use)
                     const allDays = calendarGrid.querySelectorAll('.day');
                     allDays.forEach(d => d.classList.remove('selected-day'));
                     day.classList.add('selected-day');
@@ -400,74 +601,70 @@
                 calendarGrid.appendChild(day);
             }
         }
-        
-        function renderTodoList(date) {
-            todoList.innerHTML = '';
-            const selectedDate = date.toDateString();
+
+        function renderUpcomingTasks() {
+            upcomingTaskList.innerHTML = '';
             
-            const tasksForDate = tasks.filter(task => new Date(task.date).toDateString() === selectedDate);
+            const upcomingTasks = tasks.filter(task => !task.completed)
+                                       .sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            if (tasksForDate.length === 0) {
+            if (upcomingTasks.length === 0) {
                 const li = document.createElement('li');
-                li.innerHTML = "No tasks for this day. 🎉";
-                todoList.appendChild(li);
+                li.innerHTML = "No upcoming tasks! 🎉";
+                upcomingTaskList.appendChild(li);
                 return;
             }
             
-            tasksForDate.forEach(task => {
+            upcomingTasks.forEach(task => {
                 const li = document.createElement('li');
-                li.classList.add('todo-item');
+                li.classList.add('task-item');
                 li.innerHTML = `
-                    <input type="checkbox" onchange="toggleTaskCompletion('${task.id}')" ${task.completed ? 'checked' : ''}>
-                    <span>${task.text}</span>
+                    <input type="checkbox" onchange="toggleTaskCompletion('${task.id}')">
+                    <div class="task-item-content">
+                        <h4>${task.title}</h4>
+                        <p>${task.description || ''}</p>
+                        <span class="task-date">${new Date(task.date).toLocaleDateString()}</span>
+                    </div>
                 `;
-                if (task.completed) {
-                    li.classList.add('completed');
-                }
-                todoList.appendChild(li);
+                upcomingTaskList.appendChild(li);
             });
         }
         
         function addTask() {
-            const taskText = newTaskInput.value.trim();
-            if (taskText) {
-                const selectedDay = document.querySelector('.day.selected-day');
-                const taskDate = selectedDay ? new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay.textContent) : new Date();
-                
+            const taskTitle = taskTitleInput.value.trim();
+            const taskDescription = taskDescriptionInput.value.trim();
+            const taskDate = taskDateInput.value;
+            
+            if (taskTitle && taskDate) {
                 const newTask = {
                     id: Date.now().toString(),
-                    text: taskText,
+                    title: taskTitle,
+                    description: taskDescription,
+                    date: taskDate,
                     completed: false,
-                    date: taskDate
                 };
+                
                 tasks.push(newTask);
                 saveData();
-                newTaskInput.value = '';
                 
-                renderTodoList(taskDate);
+                taskTitleInput.value = '';
+                taskDescriptionInput.value = '';
+                taskDateInput.value = '';
+                
+                renderUpcomingTasks();
                 renderCalendar();
+            } else {
+                alert('Please enter a task title and date.');
             }
         }
 
         function toggleTaskCompletion(id) {
             const taskIndex = tasks.findIndex(task => task.id === id);
             if (taskIndex !== -1) {
-                tasks[taskIndex].completed = !tasks[taskIndex].completed;
-                
-                // Move task to completedTasks array if checked
-                if (tasks[taskIndex].completed) {
-                    const completedTask = tasks.splice(taskIndex, 1)[0];
-                    completedTasks.push(completedTask);
-                }
-                
+                tasks[taskIndex].completed = true;
                 saveData();
-                const selectedDay = document.querySelector('.day.selected-day');
-                if (selectedDay) {
-                    renderTodoList(new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay.textContent));
-                } else {
-                    renderTodoList(new Date());
-                }
-                renderCompletedList();
+                renderUpcomingTasks();
+                renderCalendar();
             }
         }
         
@@ -478,14 +675,23 @@
 
         function renderCompletedList() {
             completedList.innerHTML = '';
-            completedTasks.forEach(task => {
+            const completed = tasks.filter(task => task.completed);
+            
+            if (completed.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = "No tasks have been completed yet.";
+                completedList.appendChild(li);
+                return;
+            }
+
+            completed.forEach(task => {
                 const li = document.createElement('li');
                 li.classList.add('completed-list-item');
-                li.textContent = task.text;
+                li.textContent = task.title;
                 completedList.appendChild(li);
             });
         }
-
+        
         function openModal(id) {
             document.getElementById(id).style.display = 'block';
         }
@@ -494,39 +700,21 @@
             document.getElementById(id).style.display = 'none';
         }
 
-        function showContent(viewId) {
-            // Optional: for future multiple content views
-            document.getElementById('tasks-view').style.display = 'block';
-        }
-        
         // Event Listeners
         prevMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
             renderCalendar();
-            renderTodoList(currentDate);
         });
 
         nextMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
             renderCalendar();
-            renderTodoList(currentDate);
-        });
-        
-        newTaskInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                addTask();
-            }
         });
 
         // Initial render
+        renderRevisionSites();
         renderCalendar();
-        renderTodoList(new Date());
-
-        // Highlight today's date initially
-        const today = new Date();
-        const todayDay = today.getDate();
-        const days = document.querySelectorAll('.day');
-        days[todayDay - 1].classList.add('current-day');
+        renderUpcomingTasks();
     </script>
 
 </body>
